@@ -68,6 +68,7 @@ export default async function HomePage({
       tag: tags,
     })
     .from(posts)
+    .where(eq(posts.archived, false))
     .leftJoin(queriedTagRelations, eq(queriedTagRelations.postId, posts.id))
     .leftJoin(queriedTags, eq(queriedTags.id, queriedTagRelations.tagId))
     .groupBy(posts.id, tags.id)
@@ -129,24 +130,12 @@ export default async function HomePage({
                 <span className="line-clamp-1 flex-1 bg-sky-50 pr-6 pl-1.5 text-nowrap overflow-ellipsis">
                   {tag.name}
                 </span>
-                <Link
-                  className="flex items-center bg-sky-800 px-1.5 py-0.5 text-white transition-colors hover:bg-sky-700"
-                  href={
-                    tagParam.length > 1
-                      ? {
-                          query: {
-                            t: tagParam.filter((param) => param !== tag.id),
-                          },
-                        }
-                      : "/"
-                  }
-                >
-                  <PiXBold />
-                </Link>
+                <PiXBold />
               </span>
             ))}
           </h1>
         )}
+
         {Array.from(postsResult.values()).map(
           ({ post, author, event, vote, tags }) => (
             <article

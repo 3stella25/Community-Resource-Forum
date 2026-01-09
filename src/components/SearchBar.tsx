@@ -53,14 +53,12 @@ export function SearchBar() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-5 font-sans">
+    <div className="mx-auto max-w-4xl p-5 font-sans">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-row gap-1.5 sm:gap-2.5 mb-[-25]" // Always row, smaller gap on mobile, reduced bottom margin
+        className="mb-[-25] flex flex-row gap-1.5 sm:gap-2.5" // Always row, smaller gap on mobile, reduced bottom margin
       >
-        <div
-          className="relative flex-1 flex items-center bg-white border-2 border-gray-300 rounded-md px-2 sm:px-3 w-full"
-        >
+        <div className="relative flex w-full flex-1 items-center rounded-md border-2 border-gray-300 bg-white px-2 sm:px-3">
           {/* Search Icon */}
           <svg
             width="20"
@@ -71,7 +69,7 @@ export function SearchBar() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-gray-500 w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 shrink-0" // Smaller icon on mobile
+            className="mr-1.5 h-4 w-4 shrink-0 text-gray-500 sm:mr-2 sm:h-5 sm:w-5" // Smaller icon on mobile
           >
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.35-4.35" />
@@ -83,13 +81,13 @@ export function SearchBar() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search posts..."
             disabled={isLoading}
-            className="flex-1 py-2 sm:py-2.5 text-sm sm:text-base bg-transparent text-gray-900 border-none outline-none placeholder-gray-400 w-full" // Smaller text/padding on mobile
+            className="w-full flex-1 border-none bg-transparent py-2 text-sm text-gray-900 placeholder-gray-400 outline-none sm:py-2.5 sm:text-base" // Smaller text/padding on mobile
           />
 
           {/* Filters Icon */}
           <button
             type="button"
-            className="bg-transparent border-none cursor-pointer p-1 flex items-center ml-1.5 sm:ml-2" // Smaller margin on mobile
+            className="ml-1.5 flex cursor-pointer items-center border-none bg-transparent p-1 sm:ml-2" // Smaller margin on mobile
             onClick={(e) => {
               e.preventDefault();
               // Add filter functionality here
@@ -104,7 +102,7 @@ export function SearchBar() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-gray-500 w-4 h-4 sm:w-5 sm:h-5 shrink-0" // Smaller icon on mobile
+              className="h-4 w-4 shrink-0 text-gray-500 sm:h-5 sm:w-5" // Smaller icon on mobile
             >
               <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3" />
             </svg>
@@ -114,10 +112,11 @@ export function SearchBar() {
         <button
           type="submit"
           disabled={isLoading}
-          className={`py-2 sm:py-2.5 px-3 sm:px-5 text-sm sm:text-base text-white border-none rounded-md shrink-0 ${ // Smaller text/padding on mobile, removed w-full
+          className={`shrink-0 rounded-md border-none px-3 py-2 text-sm text-white sm:px-5 sm:py-2.5 sm:text-base ${
+            // Smaller text/padding on mobile, removed w-full
             isLoading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-[#02ACF7] hover:bg-blue-700 cursor-pointer"
+              ? "cursor-not-allowed bg-gray-400"
+              : "cursor-pointer bg-[#02ACF7] hover:bg-blue-700"
           }`}
         >
           {isLoading ? "Searching..." : "Search"}
@@ -125,22 +124,20 @@ export function SearchBar() {
       </form>
 
       {error && (
-        <div
-          className="p-4 bg-red-100 border border-red-300 rounded-md mb-5 text-red-700"
-        >
+        <div className="mb-5 rounded-md border border-red-300 bg-red-100 p-4 text-red-700">
           Error: {error}
         </div>
       )}
 
       {results.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold mb-4">
+          <h2 className="mb-4 text-xl font-bold">
             Found {results.length} result{results.length !== 1 ? "s" : ""}
           </h2>
           {results.map((post) => (
             <div
               key={post.id}
-              className="p-4 border border-gray-300 rounded-md mb-2.5 bg-gray-50"
+              className="mb-2.5 rounded-md border border-gray-300 bg-gray-50 p-4"
             >
               <p className="mb-2.5">{post.content}</p>
               <div className="text-sm text-gray-600">
