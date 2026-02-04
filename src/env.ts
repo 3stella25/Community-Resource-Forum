@@ -1,6 +1,12 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+function switchEnvironment<T, R>(opt: { local: T; vercel: R }) {
+  return process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "development"
+    ? opt.vercel
+    : opt.local;
+}
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -10,12 +16,13 @@ export const env = createEnv({
     AUTH_ENDPOINT: z.url().default("https://devdogsuga.org/api/auth"),
     AUTH_CLIENT_ID: z.string(),
     AUTH_CLIENT_SECRET: z.string(),
-    AUTH_REDIRECT_URI: z.url().default("http://localhost:3000/api/auth"),
-    MYSQL_USER: (process.env.VERCEL_ENV &&
-    process.env.VERCEL_ENV !== "development"
-      ? z.string()
-      : z.literal("root")
-    ).default("root"),
+    AUTH_REDIRECT_URI: z
+      .url()
+      .default(`http://localhost:${process.env.PORT ?? 3000}/api/auth`),
+    MYSQL_USER: switchEnvironment({
+      local: z.string().default("root"),
+      vercel: z.string(),
+    }),
     MYSQL_PASSWORD: z.string().default("password"),
     MYSQL_HOST: z.string().default("localhost"),
     MYSQL_PORT: z.coerce.number().min(1).max(65536).default(25060),
@@ -44,8 +51,14 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    AUTH_CLIENT_ID: process.env.AUTH_CLIENT_ID,
-    AUTH_CLIENT_SECRET: process.env.AUTH_CLIENT_SECRET,
+    AUTH_CLIENT_ID: switchEnvironment({
+      local: process.env.AUTH_CLIENT_ID,
+      vercel: process.env.SHARED_AUTH_CLIENT_ID,
+    }),
+    AUTH_CLIENT_SECRET: switchEnvironment({
+      local: process.env.AUTH_CLIENT_SECRET,
+      vercel: process.env.SHARED_AUTH_CLIENT_SECRET,
+    }),
     AUTH_ENDPOINT: process.env.AUTH_ENDPOINT,
     AUTH_REDIRECT_URI: process.env.AUTH_REDIRECT_URI,
     MYSQL_USER: process.env.MYSQL_USER,

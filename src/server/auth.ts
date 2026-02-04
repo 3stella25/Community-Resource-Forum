@@ -148,6 +148,8 @@ export async function handleOAuthRedirect(request: NextRequest) {
     return insertedProfile.id;
   });
 
+  console.log({ test: userProfileId });
+
   const [insertedSession] = await db
     .insert(sessions)
     .values({
