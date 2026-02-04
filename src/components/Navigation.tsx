@@ -37,7 +37,7 @@ export default async function Navigation() {
     },
   });
 
-  console.log({session});
+  console.log({ session });
 
   const profiles = session
     ? [
