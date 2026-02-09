@@ -1,8 +1,8 @@
 data "external_schema" "drizzle" {
   program = [ 
     "cat",
-    "volumes/atlas/ddl.sql",
-    "volumes/atlas/overrides.sql",
+    "/migrations/ddl.sql",
+    "/migrations/overrides.sql",
   ]
 }
 
